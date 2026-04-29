@@ -21,13 +21,14 @@ minimal edits.
 11. [`10-phase-8-sync-collections.md`](./10-phase-8-sync-collections.md) — populate collections + publish to all sales channels
 12. [`14-phase-9-match-footer-header.md`](./14-phase-9-match-footer-header.md) — wire footer menu blocks to dedicated menus
 13. [`15-phase-10-product-page.md`](./15-phase-10-product-page.md) — patch `templates/product.json` to match the demo PDP
-14. [`11-next-steps.md`](./11-next-steps.md) — pending two-step continuations (page bodies, collection metadata)
-15. [`12-troubleshooting.md`](./12-troubleshooting.md) — errors we hit and how we fixed them
-16. [`13-reusing-for-another-site.md`](./13-reusing-for-another-site.md) — diff checklist when pointing at a new demo/target
+14. [`16-phase-11-audit-collections.md`](./16-phase-11-audit-collections.md) — audit collection ↔ product links, fix the empty `accessories` collection
+15. [`11-next-steps.md`](./11-next-steps.md) — pending two-step continuations (page bodies, collection metadata)
+16. [`12-troubleshooting.md`](./12-troubleshooting.md) — errors we hit and how we fixed them
+17. [`13-reusing-for-another-site.md`](./13-reusing-for-another-site.md) — diff checklist when pointing at a new demo/target
 
 ## Snapshot of the live run
 
 - **Demo:** `https://theme-ritual-demo.myshopify.com/`
-- **Target:** `wear-revamp.myshopify.com` (theme `146185617461`, Ritual preset already installed on Horizon)
-- **Repo:** `https://github.com/rinaldomelo/wear` (Horizon at root, cloner under `tools/`)
-- **Result so far:** 4 pages + 1 blog + 8 collections + 2 menus created; 71 products uploaded by user; collections populated (149 product↔collection links across 7 non-empty collections) and published to all 3 sales channels; footer rebuilt with 3 column menus (SHOP/BRAND/CONNECT) wired into theme via themeFilesUpsert; product page brought to demo parity (single Add to cart, static "Goes well with..." row of 6 collections, dark text-only collection-links bar above the footer wired to those same 6 collections, Wear shipping/returns notice).
+- **Target:** `wear-revamp.myshopify.com` (currently published theme `146185682997`, Ritual preset on Horizon)
+- **Repo:** `https://github.com/rinaldomelo/wear` (Horizon at root, cloner under `tools/`, branch `main` is the source of truth — repo is kept in sync with live)
+- **Result so far:** 4 pages + 1 blog + 8 collections + 2 menus created; 71 products uploaded by user; collections fully populated and audited — every target collection's live product set matches the demo's set 1:1 (`new` 30, `tops` 17, `bottoms` 30, `knitwear` 7, `dresses` 6, `denim` 20, `accessories` 4, `bestsellers` 39 — 153 links total) and published to all 3 sales channels; footer rebuilt with 3 column menus (SHOP/BRAND/CONNECT) wired into theme via themeFilesUpsert; product page brought to demo parity (single Add to cart, static "Goes well with..." row of 6 collections, dark text-only collection-links bar above the footer wired to those same 6 collections, Wear shipping/returns notice).
