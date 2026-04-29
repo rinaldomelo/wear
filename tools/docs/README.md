@@ -20,13 +20,14 @@ minimal edits.
 10. [`09-phase-7-products.md`](./09-phase-7-products.md) — user-uploaded product CSV step
 11. [`10-phase-8-sync-collections.md`](./10-phase-8-sync-collections.md) — populate collections + publish to all sales channels
 12. [`14-phase-9-match-footer-header.md`](./14-phase-9-match-footer-header.md) — wire footer menu blocks to dedicated menus
-13. [`11-next-steps.md`](./11-next-steps.md) — pending two-step continuations (page bodies, collection metadata)
-14. [`12-troubleshooting.md`](./12-troubleshooting.md) — errors we hit and how we fixed them
-15. [`13-reusing-for-another-site.md`](./13-reusing-for-another-site.md) — diff checklist when pointing at a new demo/target
+13. [`15-phase-10-product-page.md`](./15-phase-10-product-page.md) — patch `templates/product.json` to match the demo PDP
+14. [`11-next-steps.md`](./11-next-steps.md) — pending two-step continuations (page bodies, collection metadata)
+15. [`12-troubleshooting.md`](./12-troubleshooting.md) — errors we hit and how we fixed them
+16. [`13-reusing-for-another-site.md`](./13-reusing-for-another-site.md) — diff checklist when pointing at a new demo/target
 
 ## Snapshot of the live run
 
 - **Demo:** `https://theme-ritual-demo.myshopify.com/`
 - **Target:** `wear-revamp.myshopify.com` (theme `146185617461`, Ritual preset already installed on Horizon)
 - **Repo:** `https://github.com/rinaldomelo/wear` (Horizon at root, cloner under `tools/`)
-- **Result so far:** 4 pages + 1 blog + 8 collections + 2 menus created; 71 products uploaded by user; collections populated (149 product↔collection links across 7 non-empty collections) and published to all 3 sales channels; footer rebuilt with 3 column menus (SHOP/BRAND/CONNECT) wired into theme via themeFilesUpsert.
+- **Result so far:** 4 pages + 1 blog + 8 collections + 2 menus created; 71 products uploaded by user; collections populated (149 product↔collection links across 7 non-empty collections) and published to all 3 sales channels; footer rebuilt with 3 column menus (SHOP/BRAND/CONNECT) wired into theme via themeFilesUpsert; product page brought to demo parity (single Add to cart, static "Goes well with..." row of 6 collections, Wear shipping/returns notice).

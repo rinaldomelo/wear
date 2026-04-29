@@ -19,6 +19,8 @@ A diff-style checklist for when you point this cloner at a new pair of stores.
 | Theme scopes (`read_themes` / `write_themes`) | [`06-phase-4-auth.md`](./06-phase-4-auth.md) |
 | Footer menu handles (`footer-shop` / `footer-brand` / `footer-connect`) | [`14-phase-9-match-footer-header.md`](./14-phase-9-match-footer-header.md) |
 | Footer block IDs in `sections/footer-group.json` | live theme — must be looked up per store via `theme.files` query |
+| PDP "Goes well with" collection handles (6 entries in `collection_list`) | `tools/scripts/sync-product.sh` — the array passed into `collection_list` on `collection_list_goes_well` section |
+| PDP shipping/returns notice copy | `tools/scripts/sync-product.sh` — the `notice_html` string |
 
 ## What stays the same
 
@@ -90,3 +92,9 @@ A diff-style checklist for when you point this cloner at a new pair of stores.
   `menu_4KapTg`) are specific to wear-revamp. New stores will have different
   block IDs. Always read the live file via the `theme.files` query before
   patching.
+- **`templates/product.json` may diverge from repo per-store.** Whichever
+  preset the new target store has installed (Ritual or otherwise) will write
+  its own `templates/product.json` to the live theme, distinct from the
+  repo's Horizon default. Always read the live file before patching, and
+  match blocks/sections by stable identifiers (block `name` or section
+  `type`), never by hard-coded ID.
