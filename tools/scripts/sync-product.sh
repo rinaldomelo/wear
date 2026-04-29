@@ -4,7 +4,8 @@
 #   - drop the accelerated-checkout (Shop Pay) block from buy-buttons
 #   - replace `product-recommendations` with a static `collection-list` of
 #     6 collections (Bestsellers, Dresses, Tops, Accessories, Bottoms, Denim)
-#   - drop the unused `collection-links` section the preset left behind
+#   - keep the `collection-links` text bar above the footer wired to those
+#     same 6 collections (matches demo's dark text-only nav bar)
 #   - add a small Wear-branded shipping/returns notice under buy-buttons
 #
 # Idempotent: detects the already-patched shape and short-circuits the upsert.
@@ -125,13 +126,59 @@ for sid in list(sections.keys()):
         removed_recos = True
         order = [s for s in order if s != sid]
 
-# (d) drop the unused collection-links section the preset stamped in.
-removed_collinks = False
-for sid in list(sections.keys()):
-    if sections[sid].get("type") == "collection-links":
-        sections.pop(sid)
-        order = [s for s in order if s != sid]
-        removed_collinks = True
+# (d) ensure a `collection-links` text bar exists, wired to the same 6
+#     collections. Reuse the preset's section if present; otherwise create one.
+collection_handles = ["bestsellers", "dresses", "tops", "accessories", "bottoms", "denim"]
+collection_links_id = next((sid for sid, s in sections.items() if isinstance(s, dict) and s.get("type") == "collection-links"), None)
+collection_links_section = {
+    "type": "collection-links",
+    "name": "t:names.collection_links_text",
+    "blocks": {
+        "link": {
+            "type": "_collection-link",
+            "static": True,
+            "settings": {"show_count": True},
+            "blocks": {
+                "title": {
+                    "type": "_inline-collection-title",
+                    "static": True,
+                    "settings": {
+                        "font": "var(--font-body--family)",
+                        "weight": "",
+                        "line_height": "normal",
+                        "letter_spacing": "normal",
+                        "case": "none",
+                    },
+                    "blocks": {},
+                },
+                "image": {
+                    "type": "_image",
+                    "static": True,
+                    "settings": {
+                        "height": "medium",
+                        "ratio": "square",
+                        "border_radius": 0,
+                    },
+                    "blocks": {},
+                },
+            },
+            "block_order": [],
+        }
+    },
+    "settings": {
+        "collection_list": collection_handles,
+        "layout": "text",
+        "section_width": "page-width",
+        "alignment": "left",
+        "image_position": "right",
+        "color_scheme": "scheme-5",
+        "padding-block-start": 60,
+        "padding-block-end": 60,
+    },
+}
+if collection_links_id is None:
+    collection_links_id = "collection_links_bar"
+sections[collection_links_id] = collection_links_section
 
 # (e) add the new collection-list section.
 collection_list_section = {
@@ -229,8 +276,8 @@ sections[goes_well_id] = collection_list_section
 if goes_well_id not in order:
     order.append(goes_well_id)
 
-# (f) final order: just main + the new collection list.
-data["order"] = ["main"] + [s for s in order if s != "main"]
+# (f) final order: main → collection-list cards → collection-links text bar.
+data["order"] = ["main", goes_well_id, collection_links_id]
 
 # Serialize back, preserving the header.
 new_body = json.dumps(data, indent=2, ensure_ascii=False)
@@ -246,7 +293,7 @@ print(json.dumps({
     "modified": modified,
     "removed_accel": removed_accel,
     "removed_recos": removed_recos,
-    "removed_collinks": removed_collinks,
+    "collection_links_id": collection_links_id,
     "added_notice": added_notice,
 }))
 PY
@@ -306,7 +353,10 @@ goes = sections.get('collection_list_goes_well', {})
 print(f\"  collection-list section: type={goes.get('type', 'MISSING')}\")
 print(f\"  collection_list:         {goes.get('settings', {}).get('collection_list', 'MISSING')}\")
 print(f\"  product-recommendations: {[k for k in sections if 'recommendation' in k]}\")
-print(f\"  collection-links:        {[k for k,v in sections.items() if isinstance(v, dict) and v.get('type') == 'collection-links']}\")
+links = [(k,v) for k,v in sections.items() if isinstance(v, dict) and v.get('type') == 'collection-links']
+print(f\"  collection-links:        {[k for k,_ in links]}\")
+for k,v in links:
+    print(f\"    {k} layout={v.get('settings',{}).get('layout')} list={v.get('settings',{}).get('collection_list')}\")
 "
 
 rm -f "$ORIGINAL" "$PATCHED"
