@@ -4,12 +4,13 @@
 
 ## What was wrong
 
-Three differences between the live PDP and the demo:
+Four differences between the live PDP and the demo:
 
 | | Demo (Ritual) | Live (Horizon + Ritual preset) |
 | - | - | - |
 | **Buy buttons** | Single "Add to cart" | Add to cart + accelerated-checkout (Shop Pay / Buy Now) |
-| **Below-fold row** | Static row of 6 collection cards under "Goes well with..." | Dynamic `product-recommendations` (algorithmic) AND an empty `collection-links` section the preset stamped in |
+| **"Goes well with..." row** | Static row of 6 collection cards | Dynamic `product-recommendations` (algorithmic "You may also like") |
+| **Collection-links text bar** | Dark text-only nav bar above footer with 6 collections + product counts (`Bestsellers 39 · Dresses 6 · …`) | The Ritual preset stamped in a `collection-links` section but left `collection_list` empty, so it rendered nothing |
 | **Shipping/returns notice** | Small notice next to buy button (Ritual deferred-purchase copy) | Not present |
 
 Header on the PDP already matched the demo from Phase 9 — no header changes here.
@@ -17,6 +18,7 @@ Header on the PDP already matched the demo from Phase 9 — no header changes he
 User decisions for this phase:
 - Drop `accelerated-checkout` to match the demo's interface (checkout isn't enabled on wear-revamp anyway).
 - Replace `product-recommendations` with a static `collection-list` section showing the same 6 collections the demo highlights.
+- Wire the existing `collection-links` section's `collection_list` setting to those same 6 handles so the dark text bar renders above the footer.
 - Add a Wear-branded shipping/returns notice (drop the Ritual-specific copy).
 
 ## Fix in 3 sub-steps
@@ -57,9 +59,9 @@ Three structural edits, plus one new block:
 | `sections.main.blocks.product-details.blocks` | **add** `text_wear_notice` text block ("Free shipping over $75 · 30-day returns") |
 | `sections.main.blocks.product-details.block_order` | insert `text_wear_notice` after the description text |
 | `sections.product-recommendations` (or any `product_recommendations_*`) | **deleted** |
-| `sections.<*>` of type `collection-links` | **deleted** (the empty preset leftover) |
 | `sections.collection_list_goes_well` | **added** — `collection-list` section with `collection_list: [bestsellers, dresses, tops, accessories, bottoms, denim]` and a `<h3>Goes well with...</h3>` header text block |
-| `order` | replaced with `["main", "collection_list_goes_well"]` |
+| `sections.collection_links_bar` (or whichever `collection-links` ID the preset chose) | **upserted** with same 6 handles in `collection_list`, `layout: "text"`, `color_scheme: "scheme-5"` — preserves any existing preset section, otherwise creates one |
+| `order` | replaced with `["main", "collection_list_goes_well", "collection_links_bar"]` |
 
 The new `collection_list_goes_well` section's `static-collection-card` static block has nested static `_collection-card-image` and a non-static `collection-title`. Two validator gotchas surfaced here:
 
@@ -119,9 +121,11 @@ Expect: "Goes well with..." heading present, no "You may also like", "Free shipp
 
 > ⚠️ **`shopify-accelerated-checkout` in JS isn't the block.** Shopify includes a global wallet-skeleton script on every storefront. A grep for that string still matches even when the buy-buttons block omits the `accelerated-checkout` child. Validate the block's absence by re-querying the JSON template, not by greping the rendered HTML.
 
+> ⚠️ **Don't delete the preset's `collection-links` section just because it has empty block_order.** The Ritual preset stamps a `collection-links` section in with `collection_list` unset — so it renders nothing, but it's not unused. The fix is to populate `collection_list`, not to remove the section. Earlier in this phase we deleted it and then had to put it back; the script now keeps any existing `collection-links` section (matched by `type`) and only creates one if none exists.
+
 ## Files changed
 
-- **Live theme `templates/product.json`** — full restructure (see step 2). Not committed to git; the GitHub-connected repo only carries the pre-Ritual-preset version.
+- **Live theme `templates/product.json`** — full restructure (see step 2). After the run, the file was also pulled back into the GitHub-connected repo so `templates/product.json` on `main` matches the live admin state. Future Ritual-preset edits via the theme editor would still divert from git, so re-pull when that happens.
 - **`tools/scripts/sync-product.sh`** — new idempotent sync script for this phase.
 
 No other theme files touched.

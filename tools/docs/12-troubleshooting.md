@@ -152,3 +152,23 @@ You can also re-query the live theme file with the `theme.files` query to confir
 **Why:** the menu handle in the block's `settings.menu` field must already exist as a Shopify menu when the storefront renders. If you edit the theme file before running `menuCreate`, the column renders empty until the menu exists.
 
 **Fix:** always create the menus FIRST (`menuCreate`), then patch the theme file second. Order is load-bearing.
+
+---
+
+## Empty `collection-links` section in `templates/product.json` looks unused
+
+**Where:** Phase 10 — auditing the Ritual-preset PDP template before editing.
+
+**Why:** the Ritual preset stamps in a `collection-links` section with the static `link` block already configured but `collection_list` left empty. The section silently renders nothing, so it looks like dead config.
+
+**Fix:** keep the section, populate `collection_list` with the 6 collection handles you want listed (`bestsellers`, `dresses`, `tops`, `accessories`, `bottoms`, `denim` for this clone). The static `_collection-link` block iterates over `section.settings.collection_list` at render time. Don't delete the section — `sync-product.sh` now matches by `type: collection-links` and updates whichever section the preset wrote.
+
+---
+
+## `_collection-card` static block validation: which child blocks go in `block_order`
+
+**Where:** Phase 10 — building a `collection-list` section's `static-collection-card`.
+
+**Why:** Horizon's static-card schema is strict in two opposite directions. The validator requires `collection-title` to be present in `block_order`; it also requires the static `_collection-card-image` to be **absent** from `block_order` (because static blocks are not orderable).
+
+**Fix:** set `block_order: ["collection-title"]` on `static-collection-card` — the title only. Both validation errors disappear.
