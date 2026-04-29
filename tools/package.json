@@ -1,0 +1,25 @@
+{
+  "name": "wear-cloner",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "crawl": "tsx src/cli.ts crawl",
+    "extract": "tsx src/cli.ts extract",
+    "templates": "tsx src/cli.ts templates",
+    "replicate": "tsx src/cli.ts replicate",
+    "all": "tsx src/cli.ts all"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "commander": "^12.1.0",
+    "fast-xml-parser": "^4.5.1",
+    "p-limit": "^6.1.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

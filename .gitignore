@@ -1,0 +1,9 @@
+.DS_Store
+node_modules/
+tools/.cache/
+tools/dist/
+tools/data/*.json
+!tools/data/.gitkeep
+*.log
+.env
+.env.local
