@@ -176,7 +176,13 @@
         "gap": 12,
         "color_scheme": "",
         "padding-block-start": 40,
-        "padding-block-end": 50
+        "padding-block-end": 50,
+        "collection_list": [
+          "knitwear",
+          "dresses",
+          "denim",
+          "bottoms"
+        ]
       }
     },
     "featured_product_pW7dEU": {
@@ -271,7 +277,8 @@
         "layout": "media-left",
         "color_scheme": "scheme-4",
         "padding-block-start": 0,
-        "padding-block-end": 0
+        "padding-block-end": 0,
+        "product": "rose-11-bag-1"
       }
     },
     "product_list_8kR3Hb": {
@@ -566,94 +573,6 @@
         "padding-block-end": 18
       }
     },
-    "collection_list_iAQiBH": {
-      "type": "collection-list",
-      "blocks": {
-        "static-collection-card": {
-          "type": "_collection-card",
-          "name": "t:names.collection_card",
-          "static": true,
-          "settings": {
-            "placement": "on_image",
-            "horizontal_alignment": "flex-start",
-            "vertical_alignment": "flex-start",
-            "collection_card_gap": 8,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0
-          },
-          "blocks": {
-            "collection_title_RHWy4T": {
-              "type": "collection-title",
-              "name": "t:names.collection_title",
-              "settings": {
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "h5",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "collection-card-image": {
-              "type": "_collection-card-image",
-              "name": "t:names.collection_card_image",
-              "static": true,
-              "settings": {
-                "image_ratio": "portrait",
-                "toggle_overlay": false,
-                "overlay_color": "#00000026",
-                "overlay_style": "solid",
-                "gradient_direction": "to top",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "collection_title_RHWy4T"
-          ]
-        }
-      },
-      "name": "Collection list: Carousel",
-      "settings": {
-        "layout_type": "carousel",
-        "carousel_on_mobile": false,
-        "columns": 3,
-        "mobile_columns": "2",
-        "mobile_card_size": "60cqw",
-        "columns_gap": 0,
-        "bento_gap": 8,
-        "rows_gap": 8,
-        "max_collections": 4,
-        "icons_style": "arrow",
-        "icons_shape": "none",
-        "section_width": "full-width",
-        "gap": 12,
-        "color_scheme": "scheme-1",
-        "padding-block-start": 24,
-        "padding-block-end": 0
-      }
-    },
     "marquee_9AMajF": {
       "type": "marquee",
       "blocks": {
@@ -694,6 +613,138 @@
         "padding-block-end": 48,
         "gap_between_elements": 100
       }
+    },
+    "layered_slideshow_A6t8QQ": {
+      "type": "layered-slideshow",
+      "blocks": {
+        "slide_1": {
+          "type": "_layered-slide",
+          "blocks": {
+            "heading_1": {
+              "type": "text",
+              "name": "t:names.heading",
+              "settings": {
+                "text": "<h2>Rise to the top</h2>",
+                "type_preset": "h2"
+              },
+              "blocks": {}
+            },
+            "text_1": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Architectural blazers, sleek camis and effortlessly distressed tees fit every mood and occasion.</p>"
+              },
+              "blocks": {}
+            },
+            "button_1": {
+              "type": "button",
+              "settings": {
+                "label": "SHOP TOPS",
+                "link": "shopify://collections/tops"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "heading_1",
+            "text_1",
+            "button_1"
+          ],
+          "settings": {
+            "media_type_1": "image",
+            "image_1": "shopify://shop_images/79.jpg"
+          }
+        },
+        "slide_2": {
+          "type": "_layered-slide",
+          "blocks": {
+            "heading_2": {
+              "type": "text",
+              "name": "t:names.heading",
+              "settings": {
+                "text": "<h2>Iconic for a reason</h2>",
+                "type_preset": "h2"
+              },
+              "blocks": {}
+            },
+            "text_2": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Our bestselling pieces are equal parts refined and provocative. Let your style make a statement.</p>"
+              },
+              "blocks": {}
+            },
+            "button_2": {
+              "type": "button",
+              "settings": {
+                "label": "SHOP BESTSELLERS",
+                "link": "shopify://collections/bestsellers"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "heading_2",
+            "text_2",
+            "button_2"
+          ],
+          "settings": {
+            "media_type_1": "image",
+            "image_1": "shopify://shop_images/Untitled_design.jpg"
+          }
+        },
+        "slide_3": {
+          "type": "_layered-slide",
+          "blocks": {
+            "heading_3": {
+              "type": "text",
+              "name": "t:names.heading",
+              "settings": {
+                "text": "<h2>Fashion forward</h2>",
+                "type_preset": "h2"
+              },
+              "blocks": {}
+            },
+            "text_3": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Uncover our newest, highly experimental designs. For those who set trends rather than follow them.</p>"
+              },
+              "blocks": {}
+            },
+            "button_3": {
+              "type": "button",
+              "settings": {
+                "label": "SHOP NEW ARRIVALS",
+                "link": "shopify://collections/new"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "heading_3",
+            "text_3",
+            "button_3"
+          ],
+          "settings": {
+            "media_type_1": "image",
+            "image_1": "shopify://shop_images/251108_SEENUSERS_CK_15_094_F2C.jpg"
+          }
+        }
+      },
+      "block_order": [
+        "slide_1",
+        "slide_2",
+        "slide_3"
+      ],
+      "name": "Layered slideshow",
+      "settings": {
+        "section_width": "full-width",
+        "height": "large",
+        "color_scheme": "scheme-1",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
     }
   },
   "order": [
@@ -701,7 +752,7 @@
     "collection_list_FFV7jq",
     "featured_product_pW7dEU",
     "product_list_8kR3Hb",
-    "collection_list_iAQiBH",
+    "layered_slideshow_A6t8QQ",
     "marquee_9AMajF"
   ]
 }
