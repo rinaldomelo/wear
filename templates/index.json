@@ -199,7 +199,8 @@
             "video_loop": true,
             "video_autoplay": false,
             "image_position": "cover",
-            "video_position": "cover"
+            "video_position": "cover",
+            "image": "shopify://shop_images/87_a93cd0ce-e93f-433f-be72-356fe381c0d2.jpg"
           },
           "blocks": {}
         },
