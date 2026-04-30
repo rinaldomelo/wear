@@ -169,7 +169,7 @@
         "columns_gap": 48,
         "bento_gap": 8,
         "rows_gap": 24,
-        "max_collections": 5,
+        "max_collections": 6,
         "icons_style": "arrow",
         "icons_shape": "none",
         "section_width": "page-width",
@@ -182,7 +182,8 @@
           "dresses",
           "denim",
           "bottoms",
-          "tops"
+          "tops",
+          "jackets"
         ]
       }
     },
