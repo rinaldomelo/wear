@@ -169,7 +169,7 @@
         "columns_gap": 48,
         "bento_gap": 8,
         "rows_gap": 24,
-        "max_collections": 4,
+        "max_collections": 5,
         "icons_style": "arrow",
         "icons_shape": "none",
         "section_width": "page-width",
@@ -181,7 +181,8 @@
           "knitwear",
           "dresses",
           "denim",
-          "bottoms"
+          "bottoms",
+          "tops"
         ]
       }
     },
@@ -322,7 +323,7 @@
               "type": "_product-list-text",
               "name": "t:names.collection_title",
               "settings": {
-                "text": "<h3>{{ closest.collection.title }} </h3>",
+                "text": "<h3>Latest arrivals</h3>",
                 "width": "fit-content",
                 "max_width": "normal",
                 "alignment": "left",
@@ -554,7 +555,7 @@
       },
       "name": "Featured collection",
       "settings": {
-        "collection": "all",
+        "collection": "new",
         "layout_type": "grid",
         "carousel_on_mobile": false,
         "max_products": 4,
@@ -579,7 +580,7 @@
         "text_RGxHtE": {
           "type": "text",
           "settings": {
-            "text": "<h1><a href=\"/collections/all\" title=\"All products\">SHOP NOW </a></h1>",
+            "text": "<h1>WEAR </h1>",
             "width": "100%",
             "max_width": "normal",
             "alignment": "left",
