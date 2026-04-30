@@ -111,3 +111,59 @@ Re-running `sync-home.py` after a successful run:
 - Otherwise proceeds, but reuses the 3 alt-matched MediaImage GIDs instead of re-uploading.
 
 So a retry after a partial failure is safe — no duplicate Files records, no double-edit.
+
+## Phase 12 refinements (closer-to-demo)
+
+`sync-home.py` got us to demo *structure* parity but visual diff against `https://theme-ritual-demo.myshopify.com/` revealed five remaining gaps. The follow-up scripts each handle one:
+
+| Gap | Script | What it does |
+| - | - | - |
+| Grid had 4 cards, demo had 6 (`tops`, `jackets`) | `create-jackets-collection.py` + `refine-home.py` | Creates the manual `jackets` collection (mirroring 14 demo handles, all already on wear-revamp) and publishes to Online Store; `refine-home.py` then expands `collection_list_FFV7jq.collection_list` to all 6 handles and bumps `max_collections` to 6 |
+| Product list said "Products" / pulled from `/collections/all` | `refine-home.py` | Sets `product_list_8kR3Hb.settings.collection = "new"` and rewrites the `static-header` text block to `<h3>Latest arrivals</h3>` so the heading is fixed instead of `{{ closest.collection.title }}` |
+| Marquee said "SHOP NOW" / linked to `/all` | `refine-home.py` | Replaces `text_RGxHtE.settings.text` with the decorative `<h1>WEAR </h1>` wordmark, mirroring the demo's `RITUAL` wordmark |
+| Featured-product section showed Horizon's placeholder SVG (teal t-shirt) on the left | `upload-featured-hero-file.py` + `refine-home.py` | The `_media-without-appearance` block needs an explicit `image_picker` value — `block_settings.image != blank` controls placeholder vs render in `snippets/media.liquid`. We `fileCreate` the demo's `87.jpg` into Files and set `featured_product_pW7dEU.blocks.media.settings.image = "shopify://shop_images/<filename>"` |
+| Product gallery (right column) showed lifestyle hero instead of studio black bag | `add-rose-bag-hero.py` → `cleanup-rose-bag-media.py` + `reorder-rose-bag-media.py` | First attempt added the hero as **product** media (so the gallery duplicated it). The product-attached MediaImage doesn't reliably resolve via `shopify://shop_images/` either — so we use a Files-only `fileCreate` for the section, then delete the redundant product copy and reorder so `blackone.png` leads the gallery |
+
+### `image_picker` requires a Files-only asset
+
+This was the longest detour. `productCreateMedia(originalSource: <url>)` produces a `MediaImage` that's also visible via the `files` query, and its CDN url has the form `https://cdn.shopify.com/s/files/.../files/<basename>`. But Horizon's `_media-without-appearance` block resolves `block.settings.image` via `image_picker`, which only treats files uploaded through `fileCreate` (or admin Files) as referenceable through `shopify://shop_images/<filename>`. Same shape, different resolver scope.
+
+Symptoms when you mis-wire it:
+- `themeFilesUpsert` accepts the value silently (no `userErrors`).
+- The live template body shows the correct `image: "shopify://shop_images/<filename>"` setting.
+- The rendered HTML still falls into the `else` branch in `snippets/media.liquid` and emits the placeholder SVG.
+
+Fix: a separate `fileCreate` upload from the demo CDN URL → grab the resulting filename (with whatever suffix Shopify assigned, e.g. `87_c835d0de-….jpg`) → wire that into the section. `upload-featured-hero-file.py` does this; `refine-home.py` looks it up by alt and sets the setting.
+
+### Storefront page-cache is sticky and per-edge
+
+Even after `themeFilesUpsert` succeeds, the storefront's edge HTML cache happily serves the previous render for several minutes. `Cache-Control: no-cache` and randomised cache-busters did *not* defeat it; same `etag: page_cache:…:IndexController:<hash>` came back across many requests.
+
+Two things actually moved the cache:
+
+1. **A real settings-value edit + revert.** `refine-home.py --bust-cache` reads the live template, bumps `marquee_9AMajF.settings.gap_between_elements` by 1, upserts, then upserts the original value. Two byte-different uploads force a real cache invalidation. (No-op tricks like adding a trailing newline didn't bust cache; appending a `/* … */` comment to the auto-generated header tripped `FILE_VALIDATION_ERROR: Invalid JSON`.)
+2. **Polling for *consecutive* hits, not first hit.** Different edge nodes serve different cached versions. Waiting until the marker shows up *3 times in a row* across randomised UAs and busters is a much better signal that the change has propagated broadly enough for screenshots to be reliable.
+
+The verification script (`/tmp/pw-compare/full-after-bust.mjs`) wraps both: trigger `--bust-cache --marker <new-filename>`, then loop with Playwright until the page content includes the marker before screenshotting.
+
+### Order of operations (full from-zero refinement run)
+
+```bash
+# 1. Add a 6th grid card
+python3 tools/scripts/create-jackets-collection.py
+
+# 2. Upload the demo's lifestyle hero into wear-revamp's Files (fileCreate, not productCreateMedia)
+python3 tools/scripts/upload-featured-hero-file.py
+
+# 3. Wire grid handles, product-list collection/header, marquee, and featured-product media.image
+python3 tools/scripts/refine-home.py
+
+# 4. Drop the redundant product-attached hero (run only if step 3 was preceded by add-rose-bag-hero.py)
+python3 tools/scripts/cleanup-rose-bag-media.py
+
+# 5. Make `blackone.png` lead the product gallery (right column on the home featured-product)
+python3 tools/scripts/reorder-rose-bag-media.py
+
+# 6. Bust cache + verify visually
+python3 tools/scripts/refine-home.py --bust-cache --marker 87_c835d0de
+```
